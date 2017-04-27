@@ -1,6 +1,14 @@
 import cv2
+import numpy as np
+import matplotlib.pyplot as plt
 
-image = cv2.imread('Inputs/Bender.png',0)
+
+image = cv2.imread('Inputs/hsf_0_00001.png',0)
+
+image3 = cv2.imread('Inputs/hsf_1_01070.png',0)
+
+image2 = cv2.imread('Inputs/hsf_0_00000.png',0)
+
 
 #Detection window size. Align to block size and block stride.
 winSize = (64,64)
@@ -27,8 +35,28 @@ hog = cv2.HOGDescriptor(winSize,blockSize,blockStride,cellSize,nbins,derivApertu
 
 
 winStride = (8,8)
-padding = (8,8)
-locations = ((10,20),)
-hist = hog.compute(image,winStride,padding,locations)
+padding = (0,0)
+locations = ((0,0),)
 
-print(hist)
+hist1 = hog.compute(image,winStride,padding,locations)
+hist2 = hog.compute(image2,winStride,padding,locations)
+hist3 = hog.compute(image3,winStride,padding,locations)
+#hist = hog.compute(image, winStride)
+
+"""
+plt.hist(hist2)
+plt.hist(hist1)
+plt.show()
+"""
+
+print(hist1)
+
+for x in hist1:
+    print(x)
+
+#a = np.concatenate((hist1, hist2), axis=0)
+#print(np.concatenate((hist1, hist2), axis=0))
+#m = np.asmatrix(hist1)
+
+
+
