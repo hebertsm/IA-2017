@@ -1,5 +1,7 @@
 import random
 import numpy
+from numpy import ceil
+from numpy import math
 
 def metodo_newton2():
     X = random.uniform(-1, 1)
@@ -12,11 +14,12 @@ def metodo_newton2():
         d = numpy.linalg.inv(h) * g
         alfa = metodo_bissecao(X, d)
         X = X + alfa * d
-        """
-        [f, g, ~] = cal_grad(X)
-        disp(sprintf('f = %g, alfa = %g', f, alfa))
-        """
-        break
+
+        fgh = cal_grad(X)
+        f = fgh[0]
+        g = fgh[1]
+        h = fgh[2]
+
 
 def cal_grad(X):
     f = 0.5 * X[0] ^ 2 + 2.5 * X[1] ^ 2
@@ -28,31 +31,41 @@ def metodo_bissecao(X,d):
     alfa_l = 0
     alfa_u = random.random()
     Xnew = X + alfa_u * d
-    """
-    [f,g,~]=cal_grad(Xnew)
-    h=g'*d
-    while h<0
+
+    fgh = cal_grad(X)
+    f = fgh[0]
+    g = fgh[1]
+    h = fgh[2]
+
+    h=g.conj().transpose()*d
+
+    while h<0:
         alfa_u = 2*alfa_u
         Xnew = X + alfa_u*d
-        [f,g,~]=cal_grad(Xnew)
-        h=g'*d
-    end
+        fgh = cal_grad(Xnew)
+        f = fgh[0]
+        g = fgh[1]
+        h = fgh[2]
+        h = g.conj().transpose()*d
+
 
     alfa_m = (alfa_l+alfa_u)/2
-    k = ceil(log((alfa_u-alfa_l)/1.0e-5))
+    k = ceil(math.log((alfa_u-alfa_l)/1.0e-5))
     nit = 0
 
-    while nit<k & abs(h)>1.0e-5
+
+    while nit<k & abs(h)>1.0e-5:
         Xnew = X + alfa_m*d
-        [f,g,~]=cal_grad(Xnew)
-        h=g'*d
-        if h>0
+        fgh = cal_grad(Xnew)
+        f = fgh[0]
+        g = fgh[1]
+        h = fgh[2]
+        h=g.conj().transpose()*d
+        if h>0:
             alfa_u = alfa_m
-        else
+        else:
             alfa_l = alfa_m
-        end
         alfa_m = (alfa_l+alfa_u)/2
-    end
-    alfa = alfa_m
-    end
-    """
+
+    return alfa_m
+
